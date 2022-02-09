@@ -38,12 +38,12 @@ void Start(){
            { 
                
                
-               if(angle<0){
+               
                    transform.rotation = Quaternion.Euler(0,angle,0);
                 angle +=400*Time.fixedDeltaTime;
-               }
               
-            else{startLeft = false;
+              
+            if(angle>0){startLeft = false;
 
                     accLeft = true;
                 }
@@ -63,12 +63,12 @@ void Start(){
            
            if(transform.position.x>-3.3f)
            {
-                    if(angle>0){
+                   
                    transform.rotation = Quaternion.Euler(0,angle,0);
                 angle -=400*Time.fixedDeltaTime;
-               }
               
-    else{startRight = false;
+              
+    if(angle<0){startRight = false;
     dccRight = true;}
            }
             else if(angle< 45){
