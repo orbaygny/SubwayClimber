@@ -28,7 +28,7 @@ void Start(){
 }
    void FixedUpdate(){
 
-     
+     //sssss
                 
        if(startLeft){
 
@@ -133,6 +133,7 @@ void Start(){
             }
 
             blendSpeed = Mathf.Clamp(blendSpeed,0.1f,1);
+            
            /* if(startLeft){
 
             transform.position += transform.forward*15*Time.deltaTime;
