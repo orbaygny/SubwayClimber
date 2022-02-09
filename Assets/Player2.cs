@@ -4,11 +4,15 @@ using UnityEngine;
 
 public class Player2 : MonoBehaviour
 {
+    public float blendSpeed = 0f;
     public float forwardSpeed = 3f;
     public float tmpSpeed = 0;
     public float angle = 0f;
     public bool startLeft = false;
     public bool startRight = false;
+
+    public bool accLeft =false;
+    public bool dccRight = false;
 
    public Animator anim;
     // Start is called before the first frame update
@@ -30,12 +34,21 @@ void Start(){
 
             transform.position += transform.forward*15*Time.fixedDeltaTime;
            
-           if(transform.position.x<=-7.5)
+           if(transform.position.x<=-6.3)
            { 
-               transform.rotation = Quaternion.Euler(0,0,0);
-               startLeft = false;
                
-               angle =0;
+               
+               if(angle<0){
+                   transform.rotation = Quaternion.Euler(0,angle,0);
+                angle +=400*Time.fixedDeltaTime;
+               }
+              
+            else{startLeft = false;
+
+                    accLeft = true;
+                }
+                
+               
            }
             else if(angle> -45){
                 transform.rotation = Quaternion.Euler(0,angle,0);
@@ -45,22 +58,42 @@ void Start(){
 
             if(startRight){
             
+            accLeft = false;
            transform.position += transform.forward*15*Time.fixedDeltaTime;
-           if(transform.position.x>-2.5f)
+           
+           if(transform.position.x>-3.3f)
            {
-               transform.rotation = Quaternion.Euler(0,0,0);
-               
-                angle =0;
-               startRight = false;
+                    if(angle>0){
+                   transform.rotation = Quaternion.Euler(0,angle,0);
+                angle -=400*Time.fixedDeltaTime;
+               }
+              
+    else{startRight = false;
+    dccRight = true;}
            }
             else if(angle< 45){
                 transform.rotation = Quaternion.Euler(0,angle,0);
                 angle +=200*Time.fixedDeltaTime;
            }
        }
-
+     
        else
        {
+             if(accLeft && forwardSpeed<15)
+       {
+           forwardSpeed += 2*Time.fixedDeltaTime;
+           blendSpeed+= 0.2f*Time.fixedDeltaTime;
+           anim.SetFloat("Blend",blendSpeed);
+          
+       }
+
+       else if(dccRight && forwardSpeed>6)
+       {
+           forwardSpeed -= 2*Time.fixedDeltaTime;
+           blendSpeed-= 0.2f*Time.fixedDeltaTime;
+           anim.SetFloat("Blend",blendSpeed);
+       }
+
            transform.position += transform.forward*forwardSpeed*Time.fixedDeltaTime;
        }
 
@@ -92,11 +125,14 @@ void Start(){
                      
                     startLeft = false;
                     startRight = true;
+                    
                   
                     
                     
                 }
             }
+
+            blendSpeed = Mathf.Clamp(blendSpeed,0.1f,1);
            /* if(startLeft){
 
             transform.position += transform.forward*15*Time.deltaTime;
