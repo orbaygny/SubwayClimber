@@ -121,7 +121,7 @@ void Start(){
 
      else if(FinishStart)
      {
-         transform.position += transform.forward*60*Time.fixedDeltaTime;
+         transform.position += transform.forward*120*Time.fixedDeltaTime;
          anim.SetFloat("Blend",1);
      }
        
