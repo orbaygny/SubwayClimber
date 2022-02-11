@@ -16,7 +16,7 @@ public class CameraFollow : MonoBehaviour
 	void FixedUpdate ()
 	{
 
-		if(Player2.Instance.anim.GetBool("Stair") == false)
+		if(Player2.Instance.camPan == false)
 		{
 			transform.rotation = Quaternion.Euler(angleX,transform.rotation.eulerAngles.y,transform.rotation.eulerAngles.z);
 			if(offset.y<5){
@@ -29,7 +29,7 @@ public class CameraFollow : MonoBehaviour
 			}
 		}
 
-		if(Player2.Instance.anim.GetBool("Stair") == true){
+		if(Player2.Instance.camPan == true){
 			
 			transform.rotation = Quaternion.Euler(angleX,transform.rotation.eulerAngles.y,transform.rotation.eulerAngles.z);
 			if(offset.y>1){

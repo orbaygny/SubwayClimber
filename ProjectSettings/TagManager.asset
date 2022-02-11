@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Floor
   - Stair
+  - Side
+  - GameStart
+  - GameEnd
   layers:
   - Default
   - TransparentFX
