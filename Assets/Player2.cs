@@ -158,23 +158,32 @@ void Start(){
             }
             blendSpeed = Mathf.Clamp(blendSpeed,0.1f,1);
        }   
+       
+      if(transform.position.x<=-4){
+                changeAnim = false;
+
+            }
+            else if(transform.position.x>-4){
+                Debug.Log("Girdi");
+                changeAnim = true;
+            }
    }
 
 
 
     private void OnTriggerEnter(Collider other)
     {
-         if(other.gameObject.CompareTag("Side"))
-        {   Debug.Log("Girdi");
-            if(changeAnim)
-            {
+        /* if(other.gameObject.CompareTag("Side"))
+        {   
+            if(transform.position.x<=-5){
                 changeAnim = false;
+
             }
-            else if(!changeAnim)
-            {
+            else if(transform.position.x>-5){
+                Debug.Log("Girdi");
                 changeAnim = true;
             }
-        }
+        }*/
 
          if(other.gameObject.CompareTag("Floor")){
             Debug.Log("Floor Collide");
@@ -198,7 +207,7 @@ void Start(){
                  FinishStart = true;
             }
             
-            StartCoroutine(WaitAndPrint());
+          
         }
 
         if(other.gameObject.CompareTag("GameEnd")){
@@ -207,11 +216,5 @@ void Start(){
 
     } 
 
-    IEnumerator WaitAndPrint()
-    { Debug.Log("Trennnn");
-        // suspend execution for 5 seconds
-        yield return new WaitForSeconds(2);
-        
-       finish.transform.GetChild(0).transform.position =  Vector3.MoveTowards( finish.transform.GetChild(0).transform.position,  finish.transform.GetChild(0).transform.position+ new Vector3(360,0,0), 5);
-    }
+
 }
