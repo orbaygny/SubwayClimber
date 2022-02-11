@@ -121,6 +121,7 @@ void Start(){
 
      else if(FinishStart)
      {
+         transform.rotation = Quaternion.Euler(0,0,0);
          transform.position += transform.forward*120*Time.fixedDeltaTime;
          anim.SetFloat("Blend",1);
      }
@@ -190,6 +191,8 @@ void Start(){
 
         if(other.gameObject.CompareTag("Finish")){
             Debug.Log("Finish");
+             anim.SetBool("Stair",false);
+            camPan = false;
             foreach(Transform child in finish.transform){
                 child.gameObject.SetActive(true); 
                  FinishStart = true;
