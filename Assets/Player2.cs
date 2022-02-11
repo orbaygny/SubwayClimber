@@ -122,7 +122,7 @@ void Start(){
      else if(FinishStart)
      {
          transform.rotation = Quaternion.Euler(0,0,0);
-         transform.position += transform.forward*120*Time.fixedDeltaTime;
+         transform.position += transform.forward*90*Time.fixedDeltaTime;
          anim.SetFloat("Blend",1);
      }
        
@@ -211,7 +211,9 @@ void Start(){
         }
 
         if(other.gameObject.CompareTag("GameEnd")){
-          SceneManager.LoadScene(0);
+          anim.SetBool("Start",false);
+          FinishStart = false;
+          Train.Instance.closeDoor = true;
         }
 
     } 

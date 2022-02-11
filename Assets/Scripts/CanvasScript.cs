@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CanvasScript : MonoBehaviour
 {
-   
+   public bool gameEnd = false;
      public static CanvasScript Instance { get; private set; }
 
     void Awake(){
@@ -34,6 +35,23 @@ public class CanvasScript : MonoBehaviour
                 }
             }
         }
+
+        if(gameEnd){
+            foreach(Transform child in transform)
+                {
+                    if(child.gameObject.CompareTag("GameEnd"))
+                    {
+                        child.gameObject.SetActive(true);
+                       
+                    }
+                }
+        }
+
+
+    }
+
+    public void RestartLevel(){
+        SceneManager.LoadScene(0);
     }
 
 }
