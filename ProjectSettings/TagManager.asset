@@ -9,6 +9,10 @@ TagManager:
   - Side
   - GameStart
   - GameEnd
+  - Tunel
+  - NPC
+  - Ground
+  - r_Stair
   layers:
   - Default
   - TransparentFX

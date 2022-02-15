@@ -23,6 +23,9 @@ public class Ending : StateMachineBehaviour
         Train.Instance.gameEnd = true;
         
         CanvasScript.Instance.gameEnd = true;
+        Player2.Instance.CloseMeshes();
+        
+        
     
     }
 

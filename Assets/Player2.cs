@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class Player2 : MonoBehaviour
 {
+    Rigidbody rb;
+    public Vector3 posClamp;
     public float blendSpeed = 0f;
-    public float forwardSpeed = 6f;
+    public float forwardSpeed = 20f;
     public float tmpSpeed = 0;
     public float angle = 0f;
     public bool startLeft = false;
@@ -16,9 +18,12 @@ public class Player2 : MonoBehaviour
     public bool dccRight = false;
 
     public bool camPan = false;
+    public bool r_camPan = false;
 
     public bool changeAnim = true;
     public bool _stair = false;
+
+    public bool isHold = false;
 
     // Bu bölüm Finish'i açmak için
     public GameObject finish;
@@ -27,6 +32,11 @@ public class Player2 : MonoBehaviour
     public bool FinishStart = false;
 
    public Animator anim;
+   public Vector3 moveVector;
+
+   
+   public SkinnedMeshRenderer [] playerMeshes;
+
     // Start is called before the first frame update
 
   public static Player2 Instance { get; private set; }
@@ -36,38 +46,57 @@ public class Player2 : MonoBehaviour
 }
 
 void Start(){
+    //Physics.gravity = new Vector3(0, -100F, 0);
+     moveVector = new Vector3 (0,0,1);
       QualitySettings.vSyncCount = 0;
          Application.targetFrameRate = 60;
     anim = GetComponent<Animator>();
+    rb = GetComponent<Rigidbody>();
 }
    void FixedUpdate(){
 
      if(anim.GetBool("Start") && !FinishStart)
      {
-         transform.position += transform.forward*forwardSpeed*Time.fixedDeltaTime;
+        
+
+         rb.velocity = moveVector*forwardSpeed;
+
+      
+        
+         /*if(startLeft)
+         {  
+             startRight = false;
+             if(transform.position.x<-7.5f && moveVector.x==-0.5f)
+             {
+                 Debug.Log("RESET");
+                 moveVector = new Vector3(0,0,1f);
+             }
+         }*/
+        
+     
                 
-       if(startLeft){
+      /*if(startLeft){
            dccRight = false;
            // transform.position += transform.forward*15*Time.fixedDeltaTime;
            anim.SetBool("Stair",false);
-           if(transform.position.x<=-7)
+           if(transform.position.x>-7.5f)
            { 
+               //moveVector = new Vector3(-0.5f,0,0.5f);
                
                
-               
-                   transform.rotation = Quaternion.Euler(0,angle,0);
+                 transform.rotation = Quaternion.Euler(0,0,0);
                 angle +=400*Time.fixedDeltaTime;
               
               
-            if(angle>0){startLeft = false;
+           if(angle>0){startLeft = false;
 
                     accLeft = true;
                 }
                 
                
            }
-            else if(angle> -45){
-                transform.rotation = Quaternion.Euler(0,angle,0);
+            else if(angle> -30){
+               transform.rotation = Quaternion.Euler(0,angle,0);
                 angle -=200*Time.fixedDeltaTime;
            }
        }
@@ -78,10 +107,9 @@ void Start(){
             
           // transform.position += transform.forward*15*Time.fixedDeltaTime;
            
-           if(transform.position.x>-3.3f)
+           if(transform.position.x>-2.5f)
            {
-                   
-                   transform.rotation = Quaternion.Euler(0,angle,0);
+                  transform.rotation = Quaternion.Euler(0,0,0);
                 angle -=400*Time.fixedDeltaTime;
               
               
@@ -90,7 +118,7 @@ void Start(){
     
     }
            }
-            else if(angle< 45){
+            else if(angle< 30){
                 transform.rotation = Quaternion.Euler(0,angle,0);
                 angle +=200*Time.fixedDeltaTime;
            }
@@ -100,7 +128,7 @@ void Start(){
        {
              if(accLeft)
        {
-           if(forwardSpeed<15){ forwardSpeed += 6*Time.fixedDeltaTime;}
+           if(forwardSpeed<60){ forwardSpeed += 10*Time.fixedDeltaTime;}
           if(blendSpeed<1){blendSpeed+= 0.4f*Time.fixedDeltaTime;}
           
            anim.SetFloat("Blend",blendSpeed);
@@ -109,26 +137,46 @@ void Start(){
 
        else if(dccRight )
        {
-          if(forwardSpeed>6){ forwardSpeed -= 6*Time.fixedDeltaTime;}
+          if(forwardSpeed>20){ forwardSpeed -= 10*Time.fixedDeltaTime;}
           if(blendSpeed>0){blendSpeed-= 0.4f*Time.fixedDeltaTime;}
            anim.SetFloat("Blend",blendSpeed);
        }
 
            //transform.position += transform.forward*forwardSpeed*Time.fixedDeltaTime;
-       }
+       }*/
 
      }
 
-     else if(FinishStart)
+      if(FinishStart)
      {
-         transform.rotation = Quaternion.Euler(0,0,0);
-         transform.position += transform.forward*90*Time.fixedDeltaTime;
+         rb.rotation = Quaternion.Euler(0,0,0);
+         //transform.position += transform.forward*90*Time.fixedDeltaTime;
+         rb.velocity = transform.forward*100;
          anim.SetFloat("Blend",1);
      }
        
    }
 
    void Update(){
+       RaycastHit hit;
+        float distance = 100f;
+        if(Physics.Raycast(transform.position, Vector3.down, out hit, distance)) {
+            Debug.DrawRay(transform.position,Vector3.down*hit.distance,Color.yellow);
+           if(hit.transform.gameObject.CompareTag("Respawn")){ Debug.Log(hit.distance);}
+     /*     
+      * Get the location of the hit.
+      * This data can be modified and used to move your object.
+      */
+        if(hit.distance>0)
+        {   Debug.Log("GroundCheck");
+           transform.position = new Vector3(transform.position.x,hit.point.y,transform.position.z);
+        }
+ }
+       posClamp = transform.position;
+       posClamp.x = Mathf.Clamp(transform.position.x,-7.5f,-2.5f);
+       transform.position =posClamp;
+
+      
        if(anim.GetBool("Start")&& !FinishStart){
                if(_stair&&changeAnim)
        {
@@ -138,22 +186,42 @@ void Start(){
        {
            anim.SetBool("Stair",false);
        }
+          switch(isHold)
+         {
+             case true:
+             if(transform.position.x<=-7.5f){moveVector.x = 0; } // Basılı tutma sırasında karşıya geçme işleminin tamamlanmna kontrolü
+             if(forwardSpeed<40)  {forwardSpeed += 10*Time.fixedDeltaTime;} // Hız artışını sağlayan kontrol
+             if(blendSpeed>0){blendSpeed+= 0.4f*Time.deltaTime;}
+                 anim.SetFloat("Blend",blendSpeed);
+             break;
+
+             case false:
+              if(transform.position.x>=-2.5f){moveVector.x = 0;} 
+               if(forwardSpeed>20)  {forwardSpeed -= 10*Time.fixedDeltaTime;}
+                if(blendSpeed>0){blendSpeed-= 0.4f*Time.deltaTime;}
+                 anim.SetFloat("Blend",blendSpeed);
+             break;
+         }
  if (Input.touchCount >0)
             {
                 Touch touch = Input.GetTouch(0);
                 
                 if (touch.phase == TouchPhase.Began)
                 {
-                    angle = 0;
+                    isHold = true;
+                    //angle = 0;
                     startRight = false;
                     startLeft = true;
+                   moveVector.x = -0.75f;
                 }
 
                 if (touch.phase == TouchPhase.Ended)
                 {
+                    isHold = false;
                     angle =0;  
                     startLeft = false;
                     startRight = true;
+                    moveVector.x = 0.75f;
                 }
             }
             blendSpeed = Mathf.Clamp(blendSpeed,0.1f,1);
@@ -169,6 +237,22 @@ void Start(){
             }
    }
 
+     void OnCollisionEnter(Collision collision){
+         if(collision.gameObject.CompareTag("NPC")){
+             anim.SetTrigger("Struggle");
+             
+         }
+          if(collision.gameObject.CompareTag("GameEnd")){
+            
+          anim.SetBool("Start",false);
+          FinishStart = false;
+          rb.velocity = Vector3.zero;
+         // transform.parent = train;
+          Train.Instance.closeDoor = true;
+        }
+     }
+
+    
 
 
     private void OnTriggerEnter(Collider other)
@@ -188,20 +272,34 @@ void Start(){
          if(other.gameObject.CompareTag("Floor")){
             Debug.Log("Floor Collide");
             //anim.SetBool("Stair",false);
+            moveVector.z = 1;
             _stair = false;
             camPan = false;
+            r_camPan = false;
         }
         if(other.gameObject.CompareTag("Stair")){
             Debug.Log("Stair Collide");
            // anim.SetBool("Stair",true);
+           moveVector.z = 2;
            _stair =true;
             camPan = true;
+        }
+        if(other.gameObject.CompareTag("r_Stair"))
+        {
+            _stair =true;
+            r_camPan = true;
+        }
+
+        if(other.gameObject.CompareTag("Tunel")){
+            Debug.Log("Tunel");
+            finish.transform.GetChild(5).gameObject.SetActive(true);
         }
 
         if(other.gameObject.CompareTag("Finish")){
             Debug.Log("Finish");
              anim.SetBool("Stair",false);
             camPan = false;
+        r_camPan  = false;
             foreach(Transform child in finish.transform){
                 child.gameObject.SetActive(true); 
                  FinishStart = true;
@@ -210,13 +308,15 @@ void Start(){
           
         }
 
-        if(other.gameObject.CompareTag("GameEnd")){
-          anim.SetBool("Start",false);
-          FinishStart = false;
-          Train.Instance.closeDoor = true;
-        }
+       
 
     } 
 
-
+    public void CloseMeshes()
+    {
+        foreach(SkinnedMeshRenderer mesh in playerMeshes)
+        {
+            mesh.enabled = false;
+        }
+    }
 }

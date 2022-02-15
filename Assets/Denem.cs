@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class Denem : MonoBehaviour
 {
+    Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.position += transform.forward*3*Time.fixedDeltaTime;
-        
+                rb.velocity = transform.right*100;
     }
 }

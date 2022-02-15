@@ -9,6 +9,8 @@ public class Train : MonoBehaviour
 
     public bool closeDoor=false;
     public bool gameEnd = false;
+
+    public Vector3 endPos;
     // Start is called before the first frame update
     Animator anim;
      public static Train Instance { get; private set; }
@@ -33,6 +35,7 @@ public class Train : MonoBehaviour
       
         else if(closeDoor){
             anim.SetTrigger("CloseDoor");
+            closeDoor =false;
             
         }
 

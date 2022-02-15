@@ -29,8 +29,11 @@ public class CanvasScript : MonoBehaviour
                 {
                     if(child.gameObject.CompareTag("GameStart"))
                     {
+                        
                         child.gameObject.SetActive(false);
                         Player2.Instance.anim.SetBool("Start",true);
+                        Npc._NpcStart = true;
+                       
                     }
                 }
             }
