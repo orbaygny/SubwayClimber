@@ -151,7 +151,7 @@ void Start(){
      {
          rb.rotation = Quaternion.Euler(0,0,0);
          //transform.position += transform.forward*90*Time.fixedDeltaTime;
-         rb.velocity = transform.forward*100;
+         rb.velocity = transform.forward*80;
          anim.SetFloat("Blend",1);
      }
        
@@ -161,14 +161,14 @@ void Start(){
        RaycastHit hit;
         float distance = 100f;
         if(Physics.Raycast(transform.position, Vector3.down, out hit, distance)) {
-            Debug.DrawRay(transform.position,Vector3.down*hit.distance,Color.yellow);
-           if(hit.transform.gameObject.CompareTag("Respawn")){ Debug.Log(hit.distance);}
+           
+          
      /*     
       * Get the location of the hit.
       * This data can be modified and used to move your object.
       */
         if(hit.distance>0)
-        {   Debug.Log("GroundCheck");
+        {   
            transform.position = new Vector3(transform.position.x,hit.point.y,transform.position.z);
         }
  }
@@ -232,7 +232,7 @@ void Start(){
 
             }
             else if(transform.position.x>-4){
-                Debug.Log("Girdi");
+                
                 changeAnim = true;
             }
    }
@@ -270,7 +270,7 @@ void Start(){
         }*/
 
          if(other.gameObject.CompareTag("Floor")){
-            Debug.Log("Floor Collide");
+           
             //anim.SetBool("Stair",false);
             moveVector.z = 1;
             _stair = false;
@@ -278,7 +278,7 @@ void Start(){
             r_camPan = false;
         }
         if(other.gameObject.CompareTag("Stair")){
-            Debug.Log("Stair Collide");
+           
            // anim.SetBool("Stair",true);
            moveVector.z = 2;
            _stair =true;
@@ -291,19 +291,16 @@ void Start(){
         }
 
         if(other.gameObject.CompareTag("Tunel")){
-            Debug.Log("Tunel");
-            finish.transform.GetChild(5).gameObject.SetActive(true);
+            
+            finish.transform.GetChild(0).gameObject.SetActive(true);
         }
 
         if(other.gameObject.CompareTag("Finish")){
             Debug.Log("Finish");
              anim.SetBool("Stair",false);
             camPan = false;
-        r_camPan  = false;
-            foreach(Transform child in finish.transform){
-                child.gameObject.SetActive(true); 
-                 FinishStart = true;
-            }
+            FinishStart = true;
+           //finish.transform.GetChild(0).gameObject.SetActive(true);
             
           
         }

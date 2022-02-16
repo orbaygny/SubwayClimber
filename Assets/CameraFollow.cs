@@ -54,7 +54,7 @@ public class CameraFollow : MonoBehaviour
 			
 			transform.rotation = Quaternion.Euler(angleX,transform.rotation.eulerAngles.y,transform.rotation.eulerAngles.z);
 			if(offset.y<10){
-				offset += new Vector3(0,0.2f,0);
+				offset += new Vector3(0,0.3f,0);
 				
 			}
 			if(angleX <15)

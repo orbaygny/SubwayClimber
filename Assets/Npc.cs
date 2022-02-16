@@ -11,6 +11,8 @@ public class Npc : MonoBehaviour
     CapsuleCollider col;
      bool firstStart =true;
 
+     public bool faceFront =true;
+
      float startPos;
 
     // Start is called before the first frame update
@@ -41,14 +43,18 @@ public class Npc : MonoBehaviour
 
    void OnCollisionEnter(Collision collision)
     {
-      if(collision.gameObject.CompareTag("Player")){
+        if(collision.gameObject.CompareTag("Player")){
+      switch(faceFront)
+      {
+          case true:
+          
           if(startPos ==-2.5){
               col.enabled =false;
           //rb.constraints = RigidbodyConstraints.None;
           transform.rotation = Quaternion.Euler(0,30,0);
           anim.applyRootMotion = true;
           transform.position += transform.forward*40*Time.fixedDeltaTime;
-          anim.SetTrigger("GetHit");
+          anim.SetTrigger("HitFront");
           }
 
            if(startPos ==-7.5){
@@ -57,10 +63,31 @@ public class Npc : MonoBehaviour
           transform.rotation = Quaternion.Euler(0,-30,0);
           anim.applyRootMotion = true;
           transform.position += transform.forward*40*Time.fixedDeltaTime;
-          anim.SetTrigger("GetHit");
+          anim.SetTrigger("HitFront");
           }
-      }
+           
+          break;
 
+          case false:
+            if(transform.position.x<collision.gameObject.transform.position.x){
+                Debug.Log("ColliderGirdi");
+                col.enabled = false;
+                anim.applyRootMotion = true;
+                anim.SetTrigger("HitBack");
+            }
+            else
+            {
+                   col.enabled =false;
+          //rb.constraints = RigidbodyConstraints.None;
+          transform.rotation = Quaternion.Euler(0,60,0);
+          anim.applyRootMotion = true;
+          transform.position += transform.forward*40*Time.fixedDeltaTime;
+          anim.SetTrigger("HitFront");
+            }
+
+          break;
+      }
+    }
 
     }
 
