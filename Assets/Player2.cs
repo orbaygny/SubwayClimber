@@ -5,6 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class Player2 : MonoBehaviour
 {
+    public bool failed = false;
+    public int health = 3;
+
+    public GameObject hp;
     Rigidbody rb;
     public Vector3 posClamp;
     public float blendSpeed = 0f;
@@ -55,7 +59,7 @@ void Start(){
 }
    void FixedUpdate(){
 
-     if(anim.GetBool("Start") && !FinishStart)
+     if(anim.GetBool("Start") && !FinishStart && !anim.GetBool("End"))
      {
         
 
@@ -147,7 +151,7 @@ void Start(){
 
      }
 
-      if(FinishStart)
+      if(FinishStart && !anim.GetBool("End"))
      {
          rb.rotation = Quaternion.Euler(0,0,0);
          //transform.position += transform.forward*90*Time.fixedDeltaTime;
@@ -177,7 +181,7 @@ void Start(){
        transform.position =posClamp;
 
       
-       if(anim.GetBool("Start")&& !FinishStart){
+       if(anim.GetBool("Start")&& !FinishStart ){
                if(_stair&&changeAnim)
        {
            anim.SetBool("Stair",true);
@@ -239,7 +243,24 @@ void Start(){
 
      void OnCollisionEnter(Collision collision){
          if(collision.gameObject.CompareTag("NPC")){
-             anim.SetTrigger("Struggle");
+               
+                   
+                
+                
+                  if(health <= 1)
+             {     
+                    anim.SetBool("End",true);
+                     hp.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
+                  anim.SetTrigger("Struggle");
+                  CanvasScript.Instance.transform.GetChild(2).gameObject.SetActive(true);
+             }
+             else
+             {
+                 anim.SetTrigger("Struggle");
+                 hp.transform.GetChild(3-health).GetChild(0).gameObject.SetActive(true);
+                 health--;
+
+             }
              
          }
           if(collision.gameObject.CompareTag("GameEnd")){
