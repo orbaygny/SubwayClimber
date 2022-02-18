@@ -40,9 +40,9 @@ public class Train : MonoBehaviour
         }
       
         else if(closeDoor){
-          leftDoor.position = Vector3.MoveTowards(leftDoor.transform.position,new Vector3((closePoint.position.x/2)+closePoint.position.x,leftDoor.position.y,leftDoor.position.z),0.4f);
-            rightDoor.position = Vector3.MoveTowards( rightDoor.transform.position,new Vector3(closePoint.position.x/2, rightDoor.position.y, rightDoor.position.z),0.4f);
-           if(leftDoor.position.x == (closePoint.position.x/2)+closePoint.position.x)
+          leftDoor.localPosition = Vector3.MoveTowards(leftDoor.localPosition,new Vector3(-189.9f,leftDoor.localPosition.y,leftDoor.localPosition.z),0.07f);
+            rightDoor.localPosition = Vector3.MoveTowards( rightDoor.localPosition,new Vector3(-183.5f, rightDoor.localPosition.y, rightDoor.localPosition.z),0.07f);
+           if(rightDoor.localPosition.x ==-183.5f )
            {
                 CanvasScript.Instance.gameEnd = true;
         Player2.Instance.CloseMeshes();

@@ -159,6 +159,7 @@ void Start(){
          //transform.position += transform.forward*90*Time.fixedDeltaTime;
          rb.velocity = transform.forward*80;
          anim.SetFloat("Blend",1);
+        if(Camera.main.fieldOfView<90){ Camera.main.fieldOfView += 20 *Time.fixedDeltaTime;}
      }
        
    }
@@ -297,6 +298,7 @@ void Start(){
           rb.velocity = Vector3.zero;
          // transform.parent = train;
           Train.Instance.closeDoor = true;
+          trail.SetActive(false);
         }
      }
 
@@ -349,6 +351,7 @@ void Start(){
             camPan = false;
             FinishStart = true;
             trail.SetActive(true);
+            
            //finish.transform.GetChild(0).gameObject.SetActive(true);
             
           
