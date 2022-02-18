@@ -16,6 +16,9 @@ public class Npc : MonoBehaviour
      float startPos;
 
     // Start is called before the first frame update
+    void Awake(){
+         _NpcStart = false;
+    }
     void Start()
     {
         anim = GetComponent<Animator>();

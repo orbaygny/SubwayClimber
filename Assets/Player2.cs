@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class Player2 : MonoBehaviour
 {
+    public GameObject trail;
     public bool failed = false;
     public int health = 3;
 
@@ -47,6 +48,7 @@ public class Player2 : MonoBehaviour
 
     void Awake(){
     Instance = this;
+    trail.SetActive(false);
 }
 
 void Start(){
@@ -181,6 +183,8 @@ void Start(){
        transform.position =posClamp;
 
       
+
+      
        if(anim.GetBool("Start")&& !FinishStart ){
                if(_stair&&changeAnim)
        {
@@ -193,17 +197,36 @@ void Start(){
           switch(isHold)
          {
              case true:
-             if(transform.position.x<=-7.5f){moveVector.x = 0; } // Basılı tutma sırasında karşıya geçme işleminin tamamlanmna kontrolü
+             if(transform.position.x<=-7.5f){moveVector.x = 0; transform.rotation = Quaternion.Euler(0,0,0);  } // Basılı tutma sırasında karşıya geçme işleminin tamamlanmna kontrolü
              if(forwardSpeed<40)  {forwardSpeed += 10*Time.fixedDeltaTime;} // Hız artışını sağlayan kontrol
              if(blendSpeed>0){blendSpeed+= 0.4f*Time.deltaTime;}
+             if(angle>-30 && transform.position.x>-7.5f)
+             {
+                 Debug.Log("Rotate");
+                 transform.rotation = Quaternion.Euler(0,angle,0);
+                 angle -= 600*Time.deltaTime;
+             }
                  anim.SetFloat("Blend",blendSpeed);
+
+                  if(forwardSpeed>30 &&transform.position.x == -7.5f ) { trail.SetActive(true); }
+                  if(forwardSpeed<30 ) { trail.SetActive(false);}
+       
              break;
 
              case false:
-              if(transform.position.x>=-2.5f){moveVector.x = 0;} 
+              if(transform.position.x>=-2.5f){moveVector.x = 0; transform.rotation = Quaternion.Euler(0,0,0); trail.SetActive(true);} 
                if(forwardSpeed>20)  {forwardSpeed -= 10*Time.fixedDeltaTime;}
                 if(blendSpeed>0){blendSpeed-= 0.4f*Time.deltaTime;}
+                 if(angle<30 && transform.position.x<-2.5f)
+             {
+                 Debug.Log("Rotate");
+                 transform.rotation = Quaternion.Euler(0,angle,0);
+                 angle += 600*Time.deltaTime;
+             }
                  anim.SetFloat("Blend",blendSpeed);
+
+                  if(forwardSpeed>30 &&transform.position.x == -2.5f ) { trail.SetActive(true); }
+                  if(forwardSpeed<30 ) { trail.SetActive(false);}
              break;
          }
  if (Input.touchCount >0)
@@ -213,10 +236,11 @@ void Start(){
                 if (touch.phase == TouchPhase.Began)
                 {
                     isHold = true;
-                    //angle = 0;
+                    angle = 0;
                     startRight = false;
                     startLeft = true;
                    moveVector.x = -0.75f;
+                   trail.SetActive(false);
                 }
 
                 if (touch.phase == TouchPhase.Ended)
@@ -226,6 +250,7 @@ void Start(){
                     startLeft = false;
                     startRight = true;
                     moveVector.x = 0.75f;
+                    trail.SetActive(false);
                 }
             }
             blendSpeed = Mathf.Clamp(blendSpeed,0.1f,1);
@@ -242,7 +267,7 @@ void Start(){
    }
 
      void OnCollisionEnter(Collision collision){
-         if(collision.gameObject.CompareTag("NPC")){
+         if(collision.gameObject.CompareTag("NPC") && !FinishStart){
                
                    
                 
@@ -259,6 +284,8 @@ void Start(){
                  anim.SetTrigger("Struggle");
                  hp.transform.GetChild(3-health).GetChild(0).gameObject.SetActive(true);
                  health--;
+                 forwardSpeed = 20;
+                 blendSpeed = 0;
 
              }
              
@@ -321,6 +348,7 @@ void Start(){
              anim.SetBool("Stair",false);
             camPan = false;
             FinishStart = true;
+            trail.SetActive(true);
            //finish.transform.GetChild(0).gameObject.SetActive(true);
             
           
