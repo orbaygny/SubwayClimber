@@ -281,6 +281,7 @@ void Start(){
                      hp.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
                   anim.SetTrigger("Struggle");
                   CanvasScript.Instance.transform.GetChild(2).gameObject.SetActive(true);
+                  trail.SetActive(false);
              }
              else
              {
