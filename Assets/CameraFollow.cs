@@ -12,6 +12,10 @@ public class CameraFollow : MonoBehaviour
 	public Vector3 offset;
 
 	public float angleX = 0f;
+
+	public static CameraFollow Instance { get; private set; }	
+
+	   void Awake(){ Instance = this;}
 	void Start(){
 		offset = new Vector3(0,5,-15);
 	}
@@ -56,13 +60,31 @@ public class CameraFollow : MonoBehaviour
 		if(Player2.Instance.r_camPan == true){
 			
 			transform.rotation = Quaternion.Euler(angleX,transform.rotation.eulerAngles.y,transform.rotation.eulerAngles.z);
-			if(offset.y<10){
-				offset += new Vector3(0,0.3f,0);
+			if(Player2.Instance.isHold)
+			{
+				if(offset.y<17){
+				offset += new Vector3(0,0.6f,0);
 				
 			}
 			if(angleX <15)
 			{
 				angleX+= 0.75f;
+			}
+			}
+
+			else if(!Player2.Instance.isHold && offset.y>11f)
+			{	
+				Debug.Log("Küçültme");
+				
+				offset -= new Vector3(0,0.3f,0);
+				if(angleX <15){angleX+= 0.75f;}
+			}
+
+			else if(offset.y<10)
+			{
+				Debug.Log("Büyütme");
+					offset += new Vector3(0,0.3f,0);
+				if(angleX <15){angleX+= 0.75f;}
 			}
 		}
 		

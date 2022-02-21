@@ -201,6 +201,7 @@ void Start(){
              if(transform.position.x<=-7.5f){moveVector.x = 0; transform.rotation = Quaternion.Euler(0,0,0);  } // Basılı tutma sırasında karşıya geçme işleminin tamamlanmna kontrolü
              if(forwardSpeed<40)  {forwardSpeed += 10*Time.fixedDeltaTime;} // Hız artışını sağlayan kontrol
              if(blendSpeed>0){blendSpeed+= 0.4f*Time.deltaTime;}
+             if(CameraFollow.Instance.offset.z>-25){CameraFollow.Instance.offset.z-= 20*Time.deltaTime;}
              if(angle>-30 && transform.position.x>-7.5f)
              {
                  Debug.Log("Rotate");
@@ -218,6 +219,7 @@ void Start(){
               if(transform.position.x>=-2.5f){moveVector.x = 0; transform.rotation = Quaternion.Euler(0,0,0); trail.SetActive(true);} 
                if(forwardSpeed>20)  {forwardSpeed -= 10*Time.fixedDeltaTime;}
                 if(blendSpeed>0){blendSpeed-= 0.4f*Time.deltaTime;}
+               if(CameraFollow.Instance.offset.z<-15){CameraFollow.Instance.offset.z+= 20*Time.deltaTime;}
                  if(angle<30 && transform.position.x<-2.5f)
              {
                  Debug.Log("Rotate");
@@ -346,9 +348,10 @@ void Start(){
         }
 
         if(other.gameObject.CompareTag("Finish")){
-            Debug.Log("Finish");
+            
              anim.SetBool("Stair",false);
             camPan = false;
+            transform.position = new Vector3(-5,transform.position.y,transform.position.z);
             FinishStart = true;
             trail.SetActive(true);
             
