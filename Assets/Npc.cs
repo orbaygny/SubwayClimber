@@ -6,6 +6,7 @@ public class Npc : MonoBehaviour
 {
     public static bool _NpcStart = false;
    
+   public LayerMask ignoreLayer;
     Animator anim;
     Rigidbody rb;
     CapsuleCollider col;
@@ -27,7 +28,13 @@ public class Npc : MonoBehaviour
         startPos = transform.position.x;
        
     }
-
+    void Update(){
+           RaycastHit hit;
+        float distance = 100f;
+        if(Physics.Raycast(transform.position, Vector3.down, out hit, distance,ignoreLayer)) {
+          if(hit.distance>0){  transform.position = new Vector3(transform.position.x,hit.point.y,transform.position.z); }
+        }
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -54,10 +61,10 @@ public class Npc : MonoBehaviour
           if(startPos ==-2.5){
               col.enabled =false;
           //rb.constraints = RigidbodyConstraints.None;
-          transform.rotation = Quaternion.Euler(0,30,0);
+          transform.rotation = Quaternion.Euler(0,230,0);
           anim.applyRootMotion = true;
-          transform.position += transform.forward*40*Time.fixedDeltaTime;
-          anim.SetTrigger("HitFront");
+          transform.position += new Vector3(0,0,1)*40*Time.fixedDeltaTime;
+          anim.SetTrigger("HitBack");
           }
 
            if(startPos ==-7.5){
