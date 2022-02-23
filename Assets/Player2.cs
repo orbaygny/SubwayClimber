@@ -30,6 +30,8 @@ public class Player2 : MonoBehaviour
 
     public bool isHold = false;
 
+    public bool inTrain = false;
+
     // Bu bölüm Finish'i açmak için
     public GameObject finish;
 
@@ -63,95 +65,8 @@ void Start(){
 
      if(anim.GetBool("Start") && !FinishStart && !anim.GetBool("End"))
      {
-        
-
          rb.velocity = moveVector*forwardSpeed;
-
-      
-        
-         /*if(startLeft)
-         {  
-             startRight = false;
-             if(transform.position.x<-7.5f && moveVector.x==-0.5f)
-             {
-                 Debug.Log("RESET");
-                 moveVector = new Vector3(0,0,1f);
-             }
-         }*/
-        
-     
-                
-      /*if(startLeft){
-           dccRight = false;
-           // transform.position += transform.forward*15*Time.fixedDeltaTime;
-           anim.SetBool("Stair",false);
-           if(transform.position.x>-7.5f)
-           { 
-               //moveVector = new Vector3(-0.5f,0,0.5f);
-               
-               
-                 transform.rotation = Quaternion.Euler(0,0,0);
-                angle +=400*Time.fixedDeltaTime;
-              
-              
-           if(angle>0){startLeft = false;
-
-                    accLeft = true;
-                }
-                
-               
-           }
-            else if(angle> -30){
-               transform.rotation = Quaternion.Euler(0,angle,0);
-                angle -=200*Time.fixedDeltaTime;
-           }
-       }
-
-            if(startRight){
-            
-            accLeft = false;
-            
-          // transform.position += transform.forward*15*Time.fixedDeltaTime;
-           
-           if(transform.position.x>-2.5f)
-           {
-                  transform.rotation = Quaternion.Euler(0,0,0);
-                angle -=400*Time.fixedDeltaTime;
-              
-              
-    if(angle<0){startRight = false;
-    dccRight = true;
-    
-    }
-           }
-            else if(angle< 30){
-                transform.rotation = Quaternion.Euler(0,angle,0);
-                angle +=200*Time.fixedDeltaTime;
-           }
-       }
-     
-       else
-       {
-             if(accLeft)
-       {
-           if(forwardSpeed<60){ forwardSpeed += 10*Time.fixedDeltaTime;}
-          if(blendSpeed<1){blendSpeed+= 0.4f*Time.fixedDeltaTime;}
-          
-           anim.SetFloat("Blend",blendSpeed);
-          
-       }
-
-       else if(dccRight )
-       {
-          if(forwardSpeed>20){ forwardSpeed -= 10*Time.fixedDeltaTime;}
-          if(blendSpeed>0){blendSpeed-= 0.4f*Time.fixedDeltaTime;}
-           anim.SetFloat("Blend",blendSpeed);
-       }
-
-           //transform.position += transform.forward*forwardSpeed*Time.fixedDeltaTime;
-       }*/
-
-     }
+        }
 
       if(FinishStart && !anim.GetBool("End"))
      {
@@ -165,6 +80,8 @@ void Start(){
    }
 
    void Update(){
+
+       if(inTrain){transform.rotation = Quaternion.Euler(0,0,0); anim.SetBool("Start",false);}
        RaycastHit hit;
         float distance = 100f;
         if(Physics.Raycast(transform.position, Vector3.down, out hit, distance)) {
@@ -174,7 +91,7 @@ void Start(){
       * Get the location of the hit.
       * This data can be modified and used to move your object.
       */
-        if(hit.distance>0)
+        if(hit.distance>0 )
         {   
            transform.position = new Vector3(transform.position.x,hit.point.y,transform.position.z);
         }
@@ -206,7 +123,7 @@ void Start(){
              {
                  Debug.Log("Rotate");
                  transform.rotation = Quaternion.Euler(0,angle,0);
-                 angle -= 600*Time.deltaTime;
+                 angle -= 400*Time.deltaTime;
              }
                  anim.SetFloat("Blend",blendSpeed);
 
@@ -224,7 +141,7 @@ void Start(){
              {
                  Debug.Log("Rotate");
                  transform.rotation = Quaternion.Euler(0,angle,0);
-                 angle += 600*Time.deltaTime;
+                 angle += 400*Time.deltaTime;
              }
                  anim.SetFloat("Blend",blendSpeed);
 
@@ -232,7 +149,7 @@ void Start(){
                   if(forwardSpeed<30 ) { trail.SetActive(false);}
              break;
          }
- if (Input.touchCount >0)
+ if (Input.touchCount >0 && !inTrain && !anim.GetBool("End"))
             {
                 Touch touch = Input.GetTouch(0);
                 
@@ -295,7 +212,7 @@ void Start(){
              
          }
           if(collision.gameObject.CompareTag("GameEnd")){
-            
+        inTrain = true;
           anim.SetBool("Start",false);
           FinishStart = false;
           rb.velocity = Vector3.zero;
@@ -310,18 +227,7 @@ void Start(){
 
     private void OnTriggerEnter(Collider other)
     {
-        /* if(other.gameObject.CompareTag("Side"))
-        {   
-            if(transform.position.x<=-5){
-                changeAnim = false;
-
-            }
-            else if(transform.position.x>-5){
-                Debug.Log("Girdi");
-                changeAnim = true;
-            }
-        }*/
-
+      
          if(other.gameObject.CompareTag("Floor")){
            
             //anim.SetBool("Stair",false);

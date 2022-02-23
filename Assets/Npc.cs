@@ -26,12 +26,22 @@ public class Npc : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
         startPos = transform.position.x;
+        switch(startPos){
+            case -2.5f:
+            transform.rotation = Quaternion.Euler(0,180,0);
+            break;
+
+            case -7.5f:
+            transform.rotation = Quaternion.Euler(0,0,0);
+            break;
+        }
        
     }
     void Update(){
+        if(_NpcStart){rb.constraints = RigidbodyConstraints.None; rb.constraints = RigidbodyConstraints.FreezeRotation;}
            RaycastHit hit;
         float distance = 100f;
-        if(Physics.Raycast(transform.position, Vector3.down, out hit, distance,ignoreLayer)) {
+        if(Physics.Raycast(transform.position, Vector3.down, out hit, distance,~ignoreLayer)) {
           if(hit.distance>0){  transform.position = new Vector3(transform.position.x,hit.point.y,transform.position.z); }
         }
     }

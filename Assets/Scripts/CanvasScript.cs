@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class CanvasScript : MonoBehaviour
 {
+    public  GameObject timer;
    public bool gameEnd = false;
+   private float startTime;
      public static CanvasScript Instance { get; private set; }
 
     void Awake(){
@@ -14,12 +17,18 @@ public class CanvasScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        startTime = Time.time;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(Npc._NpcStart){
+            float t = Time.time-startTime;
+       // string min =((int)t/60).ToString();
+        string sec = (t%60).ToString("f1");
+        timer.GetComponent<TextMeshProUGUI>().text = sec;
+        }
         if(Input.touchCount >0)
         {
             Touch touch = Input.GetTouch(0);
