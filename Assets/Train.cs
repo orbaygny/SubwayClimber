@@ -34,7 +34,7 @@ public class Train : MonoBehaviour
     {
         if (gameEnd){
             closeDoor = false;
-            Camera.main.GetComponent<CameraFollow>().enabled = false;
+//            Camera.main.GetComponent<CameraFollow>().enabled = false;
             Player2.Instance.transform.parent = Train.Instance.transform;
             transform.position -= transform.right*30*Time.fixedDeltaTime;
         }

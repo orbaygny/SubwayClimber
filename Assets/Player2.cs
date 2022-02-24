@@ -197,7 +197,7 @@ void Start(){
                   if(health <= 1)
              {     
                     anim.SetBool("End",true);
-                     //hp.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
+                     hp.transform.GetChild(2).GetComponent<Image>().color = new Color32(255,255,255,60);
                   anim.SetTrigger("Struggle");
                   CanvasScript.Instance.transform.GetChild(2).gameObject.SetActive(true);
                   trail.SetActive(false);

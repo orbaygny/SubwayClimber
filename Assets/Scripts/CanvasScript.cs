@@ -17,6 +17,8 @@ public class CanvasScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        transform.GetChild(3).GetChild(0).GetComponent<TextMeshProUGUI>().text = ("Level "+ (PlayerPrefs.GetInt("level")+1));
+        transform.GetChild(3).GetChild(1).GetComponent<TextMeshProUGUI>().text = ("Level "+ (PlayerPrefs.GetInt("level")+1));
         startTime = Time.time;
     }
 
