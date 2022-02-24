@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+//using UnityEngine.UIElements;
 
 public class Player2 : MonoBehaviour
 {
@@ -127,13 +129,13 @@ void Start(){
              }
                  anim.SetFloat("Blend",blendSpeed);
 
-                  if(forwardSpeed>30 &&transform.position.x == -7.5f ) { trail.SetActive(true); }
-                  if(forwardSpeed<30 ) { trail.SetActive(false);}
+                 /* if(forwardSpeed>30 &&transform.position.x == -7.5f ) { trail.SetActive(true); }
+                  if(forwardSpeed<30 ) { trail.SetActive(false);}*/
        
              break;
 
              case false:
-              if(transform.position.x>=-2.5f){moveVector.x = 0; transform.rotation = Quaternion.Euler(0,0,0); trail.SetActive(true);} 
+              if(transform.position.x>=-2.5f){moveVector.x = 0; transform.rotation = Quaternion.Euler(0,0,0); /*trail.SetActive(true);*/} 
                if(forwardSpeed>20)  {forwardSpeed -= 10*Time.fixedDeltaTime;}
                 if(blendSpeed>0){blendSpeed-= 0.4f*Time.deltaTime;}
                if(CameraFollow.Instance.offset.z<-15){CameraFollow.Instance.offset.z+= 20*Time.deltaTime;}
@@ -145,14 +147,14 @@ void Start(){
              }
                  anim.SetFloat("Blend",blendSpeed);
 
-                  if(forwardSpeed>30 &&transform.position.x == -2.5f ) { trail.SetActive(true); }
-                  if(forwardSpeed<30 ) { trail.SetActive(false);}
+                  /*if(forwardSpeed>30 &&transform.position.x == -2.5f ) { trail.SetActive(true); }
+                  if(forwardSpeed<30 ) { trail.SetActive(false);}*/
              break;
          }
  if (Input.touchCount >0 && !inTrain && !anim.GetBool("End"))
             {
                 Touch touch = Input.GetTouch(0);
-                
+                Debug.Log("FirstStart");
                 if (touch.phase == TouchPhase.Began)
                 {
                     isHold = true;
@@ -195,7 +197,7 @@ void Start(){
                   if(health <= 1)
              {     
                     anim.SetBool("End",true);
-                     hp.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
+                     //hp.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
                   anim.SetTrigger("Struggle");
                   CanvasScript.Instance.transform.GetChild(2).gameObject.SetActive(true);
                   trail.SetActive(false);
@@ -203,7 +205,9 @@ void Start(){
              else
              {
                  anim.SetTrigger("Struggle");
-                 hp.transform.GetChild(3-health).GetChild(0).gameObject.SetActive(true);
+                 //hp.transform.GetChild(3-health).GetChild(0).gameObject.SetActive(true);
+                 hp.transform.GetChild(3-health).GetComponent<Image>().color = new Color32(255,255,255,60);
+                 
                  health--;
                  forwardSpeed = 20;
                  blendSpeed = 0;
