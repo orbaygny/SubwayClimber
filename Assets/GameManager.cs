@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using ElephantSDK;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,9 @@ public class GameManager : MonoBehaviour
     [Space]
     public GameObject CurrentLevel;
     public bool isTesting = false;
+
+
+    protected bool apkLock = true;
 
     
     void Awake()
@@ -54,8 +58,33 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
-    /*public IEnumerator LevelUp()
+
+    
+    void ApkGameStart()
     {
-       
-    }*/
+        if(Npc._NpcStart && apkLock)
+        {
+            Elephant.LevelStarted(PlayerPrefs.GetInt("level")+1);
+            apkLock = false;
+        }
+    }
+
+    void ApkGameSuccess()
+    {
+        if(Player2.Instance.inTrain && apkLock)
+        {   
+            Elephant.LevelCompleted(PlayerPrefs.GetInt("level")+1);
+            apkLock = false;
+
+        }
+    }
+
+    void ApkGameFail()
+    {
+        if(Player2.Instance.anim.GetBool("End") && apkLock)
+        {
+            Elephant.LevelFailed(PlayerPrefs.GetInt("level")+1);
+            apkLock = false;
+        }
+    }
 }
