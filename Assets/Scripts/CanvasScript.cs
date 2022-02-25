@@ -44,6 +44,7 @@ public class CanvasScript : MonoBehaviour
                         child.gameObject.SetActive(false);
                         Player2.Instance.anim.SetBool("Start",true);
                         Npc._NpcStart = true;
+                        StartCoroutine(InputStarter());
                        
                     }
                 }
@@ -68,4 +69,10 @@ public class CanvasScript : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+   
+     private IEnumerator InputStarter()
+     {
+         yield return new WaitForSeconds(0.50f);
+          Player2.Instance.InputStarter = true;
+     }
 }

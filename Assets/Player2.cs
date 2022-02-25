@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class Player2 : MonoBehaviour
 {
+    public LayerMask ignoreLayer;
     public GameObject trail;
     public bool failed = false;
     public int health = 3;
@@ -42,6 +43,8 @@ public class Player2 : MonoBehaviour
 
    public Animator anim;
    public Vector3 moveVector;
+
+   public bool InputStarter = false;
 
    
    public SkinnedMeshRenderer [] playerMeshes;
@@ -86,8 +89,9 @@ void Start(){
        if(inTrain){transform.rotation = Quaternion.Euler(0,0,0); anim.SetBool("Start",false);}
        RaycastHit hit;
         float distance = 100f;
-        if(Physics.Raycast(transform.position, Vector3.down, out hit, distance)) {
-           
+        if(Physics.Raycast(transform.position, Vector3.down, out hit, distance,~ignoreLayer)) {
+        
+        
           
      /*     
       * Get the location of the hit.
@@ -114,7 +118,37 @@ void Start(){
        {
            anim.SetBool("Stair",false);
        }
-          switch(isHold)
+
+       if(startLeft)
+       {
+            if(transform.position.x<=-7.5f){moveVector.x = 0; transform.rotation = Quaternion.Euler(0,0,0);  } // Basılı tutma sırasında karşıya geçme işleminin tamamlanmna kontrolü
+             if(forwardSpeed<40)  {forwardSpeed += 10*Time.fixedDeltaTime;} // Hız artışını sağlayan kontrol
+             if(blendSpeed>0){blendSpeed+= 0.4f*Time.deltaTime;}
+             if(CameraFollow.Instance.offset.z>-20){CameraFollow.Instance.offset.z-= 20*Time.deltaTime;}
+             if(angle>-30 && transform.position.x>-7.5f)
+             {
+                 Debug.Log("Rotate Left");
+                 transform.rotation = Quaternion.Euler(0,angle,0);
+                 angle -= 400*Time.deltaTime;
+             }
+                 anim.SetFloat("Blend",blendSpeed);
+       }
+
+       if(startRight){
+            if(transform.position.x>=-2.59999999f){moveVector.x = 0; transform.rotation = Quaternion.Euler(0,0,0); /*startRight =false;*/} 
+               if(forwardSpeed>20)  {forwardSpeed -= 10*Time.fixedDeltaTime;}
+                if(blendSpeed>0){blendSpeed-= 0.4f*Time.deltaTime;}
+               if(CameraFollow.Instance.offset.z<-15){CameraFollow.Instance.offset.z+= 20*Time.deltaTime;}
+                 if(angle<30 && transform.position.x<-2.5999999f)
+             {
+                 Debug.Log("Rotate Right");
+                 transform.rotation = Quaternion.Euler(0,angle,0); // Sorunun kaynağı
+                 angle += 400*Time.deltaTime;
+             }
+                 anim.SetFloat("Blend",blendSpeed);
+       }
+         /*if(InputStarter){
+             switch(isHold)
          {
              case true:
              if(transform.position.x<=-7.5f){moveVector.x = 0; transform.rotation = Quaternion.Euler(0,0,0);  } // Basılı tutma sırasında karşıya geçme işleminin tamamlanmna kontrolü
@@ -123,34 +157,35 @@ void Start(){
              if(CameraFollow.Instance.offset.z>-25){CameraFollow.Instance.offset.z-= 20*Time.deltaTime;}
              if(angle>-30 && transform.position.x>-7.5f)
              {
-                 Debug.Log("Rotate");
+                 Debug.Log("Rotate Left");
                  transform.rotation = Quaternion.Euler(0,angle,0);
                  angle -= 400*Time.deltaTime;
              }
                  anim.SetFloat("Blend",blendSpeed);
 
-                 /* if(forwardSpeed>30 &&transform.position.x == -7.5f ) { trail.SetActive(true); }
-                  if(forwardSpeed<30 ) { trail.SetActive(false);}*/
+                 //if(forwardSpeed>30 &&transform.position.x == -7.5f ) { trail.SetActive(true); }
+                 // if(forwardSpeed<30 ) { trail.SetActive(false);}
        
              break;
 
              case false:
-              if(transform.position.x>=-2.5f){moveVector.x = 0; transform.rotation = Quaternion.Euler(0,0,0); /*trail.SetActive(true);*/} 
+              if(transform.position.x>=-2.5f){moveVector.x = 0; transform.rotation = Quaternion.Euler(0,0,0); } 
                if(forwardSpeed>20)  {forwardSpeed -= 10*Time.fixedDeltaTime;}
                 if(blendSpeed>0){blendSpeed-= 0.4f*Time.deltaTime;}
                if(CameraFollow.Instance.offset.z<-15){CameraFollow.Instance.offset.z+= 20*Time.deltaTime;}
                  if(angle<30 && transform.position.x<-2.5f)
              {
-                 Debug.Log("Rotate");
-                 transform.rotation = Quaternion.Euler(0,angle,0);
+                 Debug.Log("Rotate Right");
+                 transform.rotation = Quaternion.Euler(0,angle,0); // Sorunun kaynağı
                  angle += 400*Time.deltaTime;
              }
                  anim.SetFloat("Blend",blendSpeed);
 
-                  /*if(forwardSpeed>30 &&transform.position.x == -2.5f ) { trail.SetActive(true); }
-                  if(forwardSpeed<30 ) { trail.SetActive(false);}*/
+                  //if(forwardSpeed>30 &&transform.position.x == -2.5f ) { trail.SetActive(true); }
+                  //if(forwardSpeed<30 ) { trail.SetActive(false);}
              break;
          }
+         }*/
  if (Input.touchCount >0 && !inTrain && !anim.GetBool("End"))
             {
                 Touch touch = Input.GetTouch(0);
@@ -197,7 +232,8 @@ void Start(){
                   if(health <= 1)
              {     
                     anim.SetBool("End",true);
-                     hp.transform.GetChild(2).GetComponent<Image>().color = new Color32(255,255,255,60);
+                     hp.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
+                    hp.transform.GetChild(2).GetComponent<Image>().color = new Color32(255,255,255,60);
                   anim.SetTrigger("Struggle");
                   CanvasScript.Instance.transform.GetChild(2).gameObject.SetActive(true);
                   trail.SetActive(false);
@@ -205,7 +241,7 @@ void Start(){
              else
              {
                  anim.SetTrigger("Struggle");
-                 //hp.transform.GetChild(3-health).GetChild(0).gameObject.SetActive(true);
+                 hp.transform.GetChild(3-health).GetChild(0).gameObject.SetActive(true);
                  hp.transform.GetChild(3-health).GetComponent<Image>().color = new Color32(255,255,255,60);
                  
                  health--;
