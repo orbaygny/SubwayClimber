@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using MoreMountains.NiceVibrations;
 //using UnityEngine.UIElements;
 
 public class Player2 : MonoBehaviour
@@ -237,6 +238,7 @@ void Start(){
                   anim.SetTrigger("Struggle");
                   CanvasScript.Instance.transform.GetChild(2).gameObject.SetActive(true);
                   trail.SetActive(false);
+                  MMVibrationManager.Haptic(HapticTypes.Failure);
              }
              else
              {
@@ -247,6 +249,7 @@ void Start(){
                  health--;
                  forwardSpeed = 20;
                  blendSpeed = 0;
+                 MMVibrationManager.Haptic(HapticTypes.MediumImpact);
 
              }
              
