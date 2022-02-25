@@ -14,7 +14,9 @@ public class GameManager : MonoBehaviour
     public bool isTesting = false;
 
 
-    protected bool apkLock = true;
+   public static bool apkStart = true;
+   public static bool apkSuccess = true;
+    public static bool apkFail = true;
 
     
     void Awake()
@@ -36,6 +38,10 @@ public class GameManager : MonoBehaviour
         {
             CurrentLevel.SetActive(true);
         }
+
+        apkStart = true;
+        apkSuccess = true;
+        apkFail = true;
     }
     
      public void NextLevel()
@@ -60,31 +66,31 @@ public class GameManager : MonoBehaviour
     }
 
     
-    void ApkGameStart()
+    public static void ApkGameStart()
     {
-        if(Npc._NpcStart && apkLock)
+        if(apkStart)
         {
-            Elephant.LevelStarted(PlayerPrefs.GetInt("level")+1);
-            apkLock = false;
+             Elephant.LevelStarted(PlayerPrefs.GetInt("level")+1);
+            apkStart = false;
         }
     }
 
-    void ApkGameSuccess()
+   public static void ApkGameSuccess()
     {
-        if(Player2.Instance.inTrain && apkLock)
+        if(apkSuccess)
         {   
             Elephant.LevelCompleted(PlayerPrefs.GetInt("level")+1);
-            apkLock = false;
+            apkSuccess = false;
 
         }
     }
 
-    void ApkGameFail()
+    public static void ApkGameFail()
     {
-        if(Player2.Instance.anim.GetBool("End") && apkLock)
+        if(apkFail)
         {
             Elephant.LevelFailed(PlayerPrefs.GetInt("level")+1);
-            apkLock = false;
+            apkFail = false;
         }
     }
 }

@@ -86,7 +86,7 @@ void Start(){
    }
 
    void Update(){
-
+        if (Npc._NpcStart && GameManager.apkStart) { GameManager.ApkGameStart(); }
        if(inTrain){transform.rotation = Quaternion.Euler(0,0,0); anim.SetBool("Start",false);}
        RaycastHit hit;
         float distance = 100f;
@@ -231,7 +231,9 @@ void Start(){
                 
                 
                   if(health <= 1)
-             {     
+             {
+                GameManager.ApkGameFail();
+
                     anim.SetBool("End",true);
                      hp.transform.GetChild(2).GetChild(0).gameObject.SetActive(true);
                     hp.transform.GetChild(2).GetComponent<Image>().color = new Color32(255,255,255,60);
@@ -255,6 +257,7 @@ void Start(){
              
          }
           if(collision.gameObject.CompareTag("GameEnd")){
+            GameManager.ApkGameSuccess();
         inTrain = true;
           anim.SetBool("Start",false);
           FinishStart = false;
